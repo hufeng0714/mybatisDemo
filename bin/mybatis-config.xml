@@ -10,6 +10,32 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         <environment id="development">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
+            <property name="driver" value="com.mysql.jdbc.Driver"/>
+            <property name="url" value="jdbc:mysql://localhost:3306/how2java?characterEncoding=UTF-8"/>
+            <property name="username" value="root"/>
+            <property name="password" value="admin"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="com/how2java/pojo/Category.xml"/>
+        <mapper class="com.how2java.mapper.CategoryMapper"/> 
+    </mappers>
+</configuration>
+
+
+<!-- <?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+      <package name="com.how2java.pojo"/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
                 <property name="url" value="jdbc:mysql://localhost:3306/how2java?characterEncoding=UTF-8"/>
                 <property name="username" value="root"/>
@@ -19,5 +45,10 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     </environments>
     <mappers>
         <mapper resource="com/how2java/pojo/Category.xml"/>
+        <mapper resource="com/how2java/pojo/Product.xml"/>
+        <mapper resource="com/how2java/pojo/Order.xml"/>
+        <mapper resource="com/how2java/pojo/OrderItem.xml"/>
     </mappers>
-</configuration>
+</configuration> -->
+
+<!-- 上面的配置适用于01-20 -->

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.how2java.pojo">
+        <!-- 本来的模糊查询方式 -->
+<!--         <select id="listProduct" resultType="Product"> -->
+<!--             select * from   product_  where name like concat('%',#{0},'%') -->
+<!--         </select> -->
+             
+        <select id="listProduct" resultType="Product">
+            <bind name="likename" value="'%' + name + '%'" />
+            select * from   product_  where name like #{likename}
+        </select>
+         
+    </mapper>
+
+<!-- 上面的配置是用于20，bind标签就像是再做一次字符串拼接，方便后续使用 -->
+
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.how2java.pojo">
+    <select id="listProduct" resultType="Product">
+          SELECT * FROM product_
+            WHERE ID in
+                <foreach item="item" index="index" collection="list"
+                    open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+    </select>
+    </mapper> -->
+
+<!-- 上面的配置是用于19的for each，Mybatis里面foreach标签通常用于in 这样的语法里。 -->
+
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.how2java.pojo">
+        <select id="listProduct" resultType="Product">
+              SELECT * FROM product_
+              <where>
+                <choose>
+                  <when test="name != null">
+                    and name like concat('%',#{name},'%')
+                  </when>          
+                  <when test="price !=null and price != 0">
+                    and price > #{price}
+                  </when>                
+                  <otherwise>
+                    and id >1
+                  </otherwise>
+                </choose>
+              </where>
+        </select>
+    </mapper> -->
+
+<!-- 上面的配置是用于18的if else，Mybatis里面没有else标签，但是可以使用when otherwise标签来达到这样的效果。 -->
+
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.how2java.pojo">
+    <select id="listProduct" resultType="Product">
+        select * from product_
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="name!=null">
+                and name like concat('%',#{name},'%')
+            </if>        
+            <if test="price!=null and price!=0">
+                and price > #{price}
+            </if>
+        </trim>      
+    </select>
+     
+    <update id="updateProduct" parameterType="Product" >
+        update product_
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name=#{name},</if>
+            <if test="price != null">price=#{price}</if>
+              
+        </trim>
+         
+         where id=#{id}   
+    </update>
+         
+    </mapper> -->
+<!-- 上面的配置是用于16-17的trim替换where和set，效果一样 -->
+
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.how2java.pojo">
+    <select id="listProduct" resultType="Product">
+        select * from product_
+        <where>
+            <if test="name!=null">
+                and name like concat('%',#{name},'%')
+            </if>        
+            <if test="price!=null and price!=0">
+                and price > #{price}
+            </if>
+        </where>     
+    </select>
+    
+        <update id="updateProduct" parameterType="Product" >
+        update product_
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="price != null">price=#{price}</if>
+              
+        </set>
+         
+         where id=#{id}   
+    </update>
+         
+    </mapper> -->
+
+<!-- 上面的配置是用于16-17的where，set -->
+
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.how2java.pojo">
+        <select id="listProduct" resultType="Product">
+            select * from product_
+            <if test="name!=null">
+                where name like concat('%',#{name},'%')
+            </if>        
+        </select>
+         
+    </mapper> -->
+ <!-- 上面的配置是用于15的if -->
+
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.how2java.pojo">
+        <select id="listProduct" resultType="Product">
+            select * from product_         
+        </select>
+        <select id="listProductByName" resultType="Product">
+            select * from product_  where name like concat('%',#{name},'%')        
+        </select>
+    </mapper> -->
+        <!-- 上面的配置是用于14的 -->
+
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.how2java.pojo">
+        <resultMap type="Product" id="productBean">
+            <id column="pid" property="id" />
+            <result column="pname" property="name" />
+            <result column="price" property="price" />
+     
+            多对一的关系
+            property: 指的是属性名称, javaType：指的是属性的类型
+            <association property="category" javaType="Category">
+                <id column="cid" property="id"/>
+                <result column="cname" property="name"/>
+            </association>
+        </resultMap>
+     
+        根据id查询Product, 关联将Orders查询出来
+        <select id="listProduct" resultMap="productBean">
+            select c.*, p.*, c.id 'cid', p.id 'pid', c.name 'cname', p.name 'pname' from category_ c left join product_ p on c.id = p.cid
+        </select>   
+        
+        <select id="getProduct" resultMap="productBean">
+            select c.*, p.*, c.id 'cid', p.id 'pid', c.name 'cname', p.name 'pname'
+                from category_ c
+                left join product_ p on c.id = p.cid
+            where p.id = #{id}
+        </select> 
+    </mapper> -->
+    
+    <!-- 上面的配置是用于01~13的 -->
